@@ -1,8 +1,5 @@
-import 'dart:js';
-
 import 'package:discussit/core/constants.dart';
 import 'package:discussit/features/auth/controller/auth_controller.dart';
-import 'package:discussit/features/auth/repository/auth_repo.dart';
 import 'package:discussit/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +8,7 @@ class SignInButton extends ConsumerWidget {
   const SignInButton({super.key});
 
   void signInWithGoogle(BuildContext context, ref) {
-    ref.read(authControllerProvider).signInWithGoogle(context);
+    ref.read(authControllerProvider.notifier).signInWithGoogle(context);
   }
 
   @override

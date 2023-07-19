@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:discussit/core/constants.dart';
 import 'package:discussit/core/failure.dart';
@@ -36,6 +34,7 @@ class AuthRepository {
 
   FutureEither<UserModel> signInWithGoogle() async {
     try {
+      await _googleSignIn.signOut();
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleAuth =
           await googleUser!.authentication;
@@ -46,8 +45,9 @@ class AuthRepository {
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
       late UserModel userModel;
-      if (userCredential.additionalUserInfo!.isNewUser) {
-        userModel = UserModel(
+      if (userCredential.user != null) {
+        if (userCredential.additionalUserInfo!.isNewUser) {
+          userModel = UserModel(
             name: userCredential.user!.displayName ?? "Anonymous",
             email: userCredential.user!.email ?? " ",
             profilepic:
@@ -57,8 +57,12 @@ class AuthRepository {
             bio: "bio",
             isAuthenticated: true,
             karma: 0,
-            awards: []);
-        await _users.doc(userCredential.user!.uid).set(userModel.toMap());
+          );
+          await _users.doc(userCredential.user!.uid).set(userModel.toMap());
+        } else {
+          userModel = await getUserData(userCredential.user!.uid).first;
+          print(userModel);
+        }
       }
       return right(userModel);
     } on FirebaseException catch (e) {
@@ -66,5 +70,25 @@ class AuthRepository {
     } catch (E) {
       return left(Failure(E.toString()));
     }
+  }
+
+  Stream<UserModel> getUserData(String uid) {
+    return _users.doc(uid).snapshots().map((event) {
+      if (event.data() != null) {
+        return UserModel.fromMap(event.data()! as Map<String, dynamic>);
+      } else {
+        // Return a default UserModel or handle the null case as needed.
+        return UserModel(
+          name: "Anonymous",
+          email: " ",
+          profilepic: Constants.avatarDefault,
+          banner: Constants.bannerDefault,
+          uid: uid,
+          bio: "bio",
+          isAuthenticated: true,
+          karma: 0,
+        ); // Replace UserModel() with your default constructor.
+      }
+    });
   }
 }

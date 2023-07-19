@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 class UserModel {
   final String name;
   final String email;
@@ -12,7 +10,6 @@ class UserModel {
   final String bio;
   final bool isAuthenticated; //guest or not
   final int karma;
-  final List<String> awards;
   UserModel({
     required this.name,
     required this.email,
@@ -22,7 +19,6 @@ class UserModel {
     required this.bio,
     required this.isAuthenticated,
     required this.karma,
-    required this.awards,
   });
 
   UserModel copyWith({
@@ -34,7 +30,6 @@ class UserModel {
     String? bio,
     bool? isAuthenticated,
     int? karma,
-    List<String>? awards,
   }) {
     return UserModel(
       name: name ?? this.name,
@@ -45,7 +40,6 @@ class UserModel {
       bio: bio ?? this.bio,
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
       karma: karma ?? this.karma,
-      awards: awards ?? this.awards,
     );
   }
 
@@ -59,7 +53,6 @@ class UserModel {
       'bio': bio,
       'isAuthenticated': isAuthenticated,
       'karma': karma,
-      'awards': awards,
     };
   }
 
@@ -72,10 +65,7 @@ class UserModel {
         uid: map['uid'] as String,
         bio: map['bio'] as String,
         isAuthenticated: map['isAuthenticated'] as bool,
-        karma: map['karma'] as int,
-        awards: List<String>.from(
-          (map['awards'] as List<String>),
-        ));
+        karma: map['karma'] as int);
   }
 
   String toJson() => json.encode(toMap());
@@ -85,7 +75,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email, profilepic: $profilepic, banner: $banner, uid: $uid, bio: $bio, isAuthenticated: $isAuthenticated, karma: $karma, awards: $awards)';
+    return 'UserModel(name: $name, email: $email, profilepic: $profilepic, banner: $banner, uid: $uid, bio: $bio, isAuthenticated: $isAuthenticated, karma: $karma)';
   }
 
   @override
@@ -99,8 +89,7 @@ class UserModel {
         other.uid == uid &&
         other.bio == bio &&
         other.isAuthenticated == isAuthenticated &&
-        other.karma == karma &&
-        listEquals(other.awards, awards);
+        other.karma == karma;
   }
 
   @override
@@ -112,7 +101,6 @@ class UserModel {
         uid.hashCode ^
         bio.hashCode ^
         isAuthenticated.hashCode ^
-        karma.hashCode ^
-        awards.hashCode;
+        karma.hashCode;
   }
 }
