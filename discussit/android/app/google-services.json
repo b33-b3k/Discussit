@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "319165775802",
+    "project_id": "discussit-93231",
+    "storage_bucket": "discussit-93231.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319165775802:android:b7041d8c2a8ed6eb256783",
+        "android_client_info": {
+          "package_name": "com.example.discussit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319165775802-6j46prhtbv3db2a5j4qeravtn3hk6bjr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfAMyXQn0eeIZqMbskVv4644_k0bLnTqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319165775802-6j46prhtbv3db2a5j4qeravtn3hk6bjr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "319165775802-la4s076tgrtb1lind4ueon10fijjg4op.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.discussit"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
