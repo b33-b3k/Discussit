@@ -17,6 +17,12 @@ final CommunityRepositoryProvider = Provider((ref) {
   return CommunityRepository(firestore: ref.watch(firestoreProvider));
 });
 
+final getCommunitybyNameProvider = StreamProvider.family((ref, String name) {
+  return ref
+      .watch(communityControllerProvider.notifier)
+      .getCommunityByName(name);
+});
+
 class CommunityRepository {
   final FirebaseFirestore _firestore;
   CommunityRepository({required FirebaseFirestore firestore})
@@ -40,10 +46,28 @@ class CommunityRepository {
         .where("members", arrayContains: uid)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs
-          .map((doc) => Community.fromMap(doc.data() as Map<String, dynamic>))
-          .toList();
+      return snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        return Community(
+          id: data['id'] as String,
+          name: data['name'] as String,
+          banner: data['banner'] as String,
+          avatar: data['avatar'] as String,
+          members: List<String>.from(data['members'] as List<dynamic>),
+          moderators: List<String>.from(data['moderators'] as List<dynamic>),
+          createdBy: data['createdBy'] as String,
+          createdAt:
+              DateTime.fromMillisecondsSinceEpoch(data['createdAt'] as int),
+          description: data['description'] as String,
+          posts: List<String>.from(data['posts'] as List<dynamic>),
+        );
+      }).toList();
     });
+  }
+
+  Stream<Community> getCommunityByName(String name) {
+    return _communities.doc(name).snapshots().map((snapshot) =>
+        Community.fromMap(snapshot.data() as Map<String, dynamic>));
   }
 
   CollectionReference get _communities =>

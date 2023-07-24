@@ -70,18 +70,18 @@ class Community {
   }
 
   factory Community.fromMap(Map<String, dynamic> map) {
+    //fucking factory constructors -doesnt work a single time
     return Community(
       id: map['id'] as String,
       name: map['name'] as String,
       banner: map['banner'] as String,
       avatar: map['avatar'] as String,
-      members: List<String>.from(map['members'] as List<String>),
-      moderators: List<String>.from(
-          map['moderators'] as List<String>), // Added .from here
+      members: List<String>.from(map['members'] ?? []),
+      moderators: List<String>.from(map['moderators'] ?? []),
       createdBy: map['createdBy'] as String,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
       description: map['description'] as String,
-      posts: List<String>.from(map['posts'] as List<String>),
+      posts: List<String>.from(map['posts'] ?? []),
     );
   }
 
