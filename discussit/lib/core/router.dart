@@ -1,8 +1,8 @@
 import 'package:discussit/features/auth/screen/loginScreen.dart';
+import 'package:discussit/features/community/screens/create_community_screen.dart';
 import 'package:discussit/features/home/screen/homescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
-import "package:discussit/features/auth/screen/loginScreen.dart";
 
 final loggedOutRoute = RouteMap(routes: {
   '/': (_) => const MaterialPage(child: Login()),
@@ -10,4 +10,5 @@ final loggedOutRoute = RouteMap(routes: {
 
 final loggedInRoute = RouteMap(routes: {
   '/': (_) => const MaterialPage(child: HomeScreen()),
+  '/createCommunity': (_) => const MaterialPage(child: CreateCommunityScreen())
 });
