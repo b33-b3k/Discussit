@@ -1,27 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:discussit/core/failure.dart';
 import 'package:discussit/core/firebase_constants.dart';
-import 'package:discussit/core/providers/firebase_providers.dart';
+
 import 'package:discussit/core/typedef.dart';
-import 'package:discussit/features/community/screens/create_community_screen.dart';
 import 'package:discussit/models/community_model.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:fpdart/fpdart.dart';
-
-final userCommunitiesProvider = StreamProvider((ref) {
-  final communityController = ref.watch(communityControllerProvider.notifier);
-  return communityController.getUserCommunities();
-});
-final CommunityRepositoryProvider = Provider((ref) {
-  return CommunityRepository(firestore: ref.watch(firestoreProvider));
-});
-
-final getCommunitybyNameProvider = StreamProvider.family((ref, String name) {
-  return ref
-      .watch(communityControllerProvider.notifier)
-      .getCommunityByName(name);
-});
 
 class CommunityRepository {
   final FirebaseFirestore _firestore;
@@ -68,6 +52,37 @@ class CommunityRepository {
   Stream<Community> getCommunityByName(String name) {
     return _communities.doc(name).snapshots().map((snapshot) =>
         Community.fromMap(snapshot.data() as Map<String, dynamic>));
+  }
+
+  FutureVoid editCommunity(Community community) async {
+    try {
+      return right(_communities.doc(community.name).update(community.toMap()));
+    } on FirebaseException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  Stream<List<Community>> searchCommunity(String query) {
+    return _communities
+        .where(
+          'name',
+          isGreaterThanOrEqualTo: query.isEmpty ? 0 : query,
+          isLessThan: query.isEmpty
+              ? null
+              : query.substring(0, query.length - 1) +
+                  String.fromCharCode(
+                    query.codeUnitAt(query.length - 1) + 1,
+                  ),
+        )
+        .snapshots()
+        .map((event) {
+      List<Community> communities = [];
+      event.docs.forEach((element) {
+        communities
+            .add(Community.fromMap(element.data() as Map<String, dynamic>));
+      });
+      return communities;
+    });
   }
 
   CollectionReference get _communities =>

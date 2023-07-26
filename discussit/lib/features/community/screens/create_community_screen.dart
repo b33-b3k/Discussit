@@ -1,3 +1,4 @@
+import 'package:discussit/core/providers/storage_repo_provider.dart';
 import 'package:discussit/core/utils.dart';
 import 'package:discussit/features/auth/screen/loginScreen.dart';
 import 'package:discussit/features/community/controller/communityController.dart';
@@ -8,8 +9,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final communityControllerProvider =
     StateNotifierProvider<CommunityController, bool>((ref) {
   final CommunityRepository = ref.watch(CommunityRepositoryProvider);
+  final StorageRepository = ref.watch(storageRepositoryProvider);
   return CommunityController(
-      communityRepository: CommunityRepository, ref: ref);
+      storageRepository: StorageRepository,
+      communityRepository: CommunityRepository,
+      ref: ref);
 });
 
 class CreateCommunityScreen extends ConsumerStatefulWidget {

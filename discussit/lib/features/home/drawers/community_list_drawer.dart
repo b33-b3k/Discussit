@@ -1,5 +1,6 @@
 import 'package:discussit/core/common/error_text.dart';
 import 'package:discussit/features/auth/screen/loginScreen.dart';
+import 'package:discussit/features/community/controller/communityController.dart';
 import 'package:discussit/features/community/repository/community_repo.dart';
 import 'package:discussit/models/community_model.dart';
 import 'package:flutter/material.dart';
