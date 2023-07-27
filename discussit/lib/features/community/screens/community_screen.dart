@@ -2,7 +2,8 @@ import 'package:discussit/core/common/error_text.dart';
 import 'package:discussit/features/auth/controller/auth_controller.dart';
 import 'package:discussit/features/auth/screen/loginScreen.dart';
 import 'package:discussit/features/community/controller/communityController.dart';
-import 'package:discussit/features/community/repository/community_repo.dart';
+import 'package:discussit/features/community/screens/create_community_screen.dart';
+import 'package:discussit/models/community_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
@@ -15,6 +16,12 @@ class CommunityScreen extends ConsumerWidget {
 
   void navigateToModTools(BuildContext context) {
     Routemaster.of(context).push('/mod-tools/$name');
+  }
+
+  void joinCommunity(WidgetRef ref, Community community, BuildContext context) {
+    ref
+        .read(communityControllerProvider.notifier)
+        .joinCommunity(community, context);
   }
 
   @override
@@ -75,7 +82,7 @@ class CommunityScreen extends ConsumerWidget {
                                     child: const Text(" Settings "))
                                 : OutlinedButton(
                                     onPressed: () =>
-                                        navigateToModTools(context),
+                                        joinCommunity(ref, community, context),
                                     style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(20),

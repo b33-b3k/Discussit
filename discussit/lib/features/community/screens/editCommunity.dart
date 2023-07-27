@@ -3,7 +3,6 @@ import 'package:discussit/core/constants.dart';
 import 'package:discussit/core/utils.dart';
 import 'package:discussit/features/auth/screen/loginScreen.dart';
 import 'package:discussit/features/community/controller/communityController.dart';
-import 'package:discussit/features/community/repository/community_repo.dart';
 import 'package:discussit/features/community/screens/create_community_screen.dart';
 import 'package:discussit/models/community_model.dart';
 import 'package:discussit/theme/pallete.dart';

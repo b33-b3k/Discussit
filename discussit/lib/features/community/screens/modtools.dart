@@ -21,7 +21,9 @@ class ModToolsScreen extends StatelessWidget {
         ListTile(
           leading: Icon(Icons.add_moderator),
           title: const Text("Add Mods"),
-          onTap: () {},
+          onTap: () {
+            Routemaster.of(context).push('/add-mods/$name');
+          },
         ),
         ListTile(
           leading: Icon(Icons.add_moderator),

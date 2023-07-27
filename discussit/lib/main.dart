@@ -51,7 +51,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                     return loggedInRoute;
                   }
                 }
-                return loggedInRoute;
+                return loggedOutRoute;
               }),
               routeInformationParser: const RoutemasterParser(),
               debugShowCheckedModeBanner: false,

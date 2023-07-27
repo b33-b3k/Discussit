@@ -17,6 +17,7 @@ final AuthRepositoryProvider = Provider((ref) => AuthRepository(
     googleSignIn: ref.read(GoogleSignInProvider)));
 
 class AuthRepository {
+  // ignore: unused_field
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;
@@ -36,7 +37,6 @@ class AuthRepository {
 
   FutureEither<UserModel> signInWithGoogle() async {
     try {
-      await _googleSignIn.signOut();
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleAuth =
           await googleUser!.authentication;
@@ -92,5 +92,10 @@ class AuthRepository {
         ); // Replace UserModel() with your default constructor.
       }
     });
+  }
+
+  void logOut() async {
+    await _googleSignIn.signOut();
+    await _auth.signOut();
   }
 }

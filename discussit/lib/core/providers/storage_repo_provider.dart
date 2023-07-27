@@ -4,7 +4,6 @@ import 'package:discussit/core/failure.dart';
 import 'package:discussit/core/providers/firebase_providers.dart';
 import 'package:discussit/core/typedef.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 

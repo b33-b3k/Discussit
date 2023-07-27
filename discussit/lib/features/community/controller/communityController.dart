@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:discussit/core/constants.dart';
+import 'package:discussit/core/failure.dart';
 import 'package:discussit/core/providers/firebase_providers.dart';
 import 'package:discussit/core/providers/storage_repo_provider.dart';
 import 'package:discussit/core/utils.dart';
@@ -10,6 +11,7 @@ import 'package:discussit/features/community/screens/create_community_screen.dar
 import 'package:discussit/models/community_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:routemaster/routemaster.dart';
 
 final userCommunitiesProvider = StreamProvider((ref) {
@@ -72,6 +74,22 @@ final class CommunityController extends StateNotifier<bool> {
     });
   }
 
+  void joinCommunity(Community community, BuildContext context) async {
+    final user = _ref.read(userProvider);
+    Either<Failure, void> res;
+    if (community.members.contains(user?.uid)) {
+      res =
+          await _communityRepository.leaveCommunity(community.name, user!.uid);
+      showSnackBar(context, 'Left Community');
+
+      return;
+    } else {
+      res = await _communityRepository.joinCommunity(community.name, user!.uid);
+      res.fold((l) => showSnackBar(context, l.message),
+          (r) => showSnackBar(context, 'Joined Community'));
+    }
+  }
+
   Stream<List<Community>> getUserCommunities() {
     final uid = _ref.read(userProvider)?.uid ?? "";
     return _communityRepository.getUserCommunities(uid);
@@ -114,5 +132,13 @@ final class CommunityController extends StateNotifier<bool> {
 
   Stream<List<Community>> searchCommunity(String query) {
     return _communityRepository.searchCommunity(query);
+  }
+
+  void addMods(
+      String communityName, List<String> uids, BuildContext context) async {
+    final res = await _communityRepository.addMods(communityName, uids);
+
+    res.fold((l) => showSnackBar(context, l.message),
+        (r) => Routemaster.of(context).pop());
   }
 }

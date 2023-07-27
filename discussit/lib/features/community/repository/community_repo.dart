@@ -16,10 +16,34 @@ class CommunityRepository {
     try {
       var communityDoc = await _communities.doc(community.name).get();
       if (communityDoc.exists) {
-        throw "Community with same name already exists";
+        return left(Failure("Community already exists"));
       }
 
       return right(_communities.doc(community.name).set(community.toMap()));
+    } on FirebaseException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid joinCommunity(String communityName, String userId) async {
+    try {
+      return right(_communities.doc(communityName).update(
+        {
+          'members': FieldValue.arrayUnion([userId])
+        },
+      ));
+    } on FirebaseException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid leaveCommunity(String communityName, String userId) async {
+    try {
+      return right(_communities.doc(communityName).update(
+        {
+          'members': FieldValue.arrayRemove([userId])
+        },
+      ));
     } on FirebaseException catch (e) {
       return left(Failure(e.toString()));
     }
@@ -83,6 +107,16 @@ class CommunityRepository {
       });
       return communities;
     });
+  }
+
+  FutureVoid addMods(String communityName, List<String> uids) async {
+    try {
+      return right(_communities.doc(communityName).update({
+        'mods': uids,
+      }));
+    } on FirebaseException catch (e) {
+      return left(Failure(e.toString()));
+    }
   }
 
   CollectionReference get _communities =>
