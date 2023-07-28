@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:discussit/core/constants.dart';
+import 'package:discussit/core/constants/constants.dart';
 import 'package:discussit/core/failure.dart';
 import 'package:discussit/core/providers/firebase_providers.dart';
 import 'package:discussit/core/providers/storage_repo_provider.dart';

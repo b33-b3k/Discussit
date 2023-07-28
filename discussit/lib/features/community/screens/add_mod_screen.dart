@@ -41,10 +41,6 @@ class _AddModsScreenState extends ConsumerState<AddModsScreen> {
     return Scaffold(
         appBar: AppBar(actions: [
           IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {},
-          ),
-          IconButton(
               onPressed: () {
                 saveMods();
               },

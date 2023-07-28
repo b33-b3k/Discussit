@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:discussit/core/constants.dart';
+import 'package:discussit/core/constants/constants.dart';
 import 'package:discussit/core/failure.dart';
 import 'package:discussit/core/firebase_constants.dart';
 import 'package:discussit/core/providers/firebase_providers.dart';

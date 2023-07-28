@@ -68,7 +68,8 @@ class CommunityScreen extends ConsumerWidget {
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
-                            community.moderators.contains(user?.uid)
+                            community.moderators.contains(user?.uid) &&
+                                    user != null
                                 ? OutlinedButton(
                                     onPressed: () =>
                                         navigateToModTools(context),

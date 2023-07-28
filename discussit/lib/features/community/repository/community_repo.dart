@@ -112,7 +112,7 @@ class CommunityRepository {
   FutureVoid addMods(String communityName, List<String> uids) async {
     try {
       return right(_communities.doc(communityName).update({
-        'mods': uids,
+        'moderators': uids,
       }));
     } on FirebaseException catch (e) {
       return left(Failure(e.toString()));

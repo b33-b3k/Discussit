@@ -1,4 +1,4 @@
-import 'package:discussit/core/constants.dart';
+import 'package:discussit/core/constants/constants.dart';
 import 'package:discussit/features/auth/controller/auth_controller.dart';
 import 'package:discussit/theme/pallete.dart';
 import 'package:flutter/material.dart';

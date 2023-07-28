@@ -5,6 +5,8 @@ import 'package:discussit/features/community/screens/create_community_screen.dar
 import 'package:discussit/features/community/screens/editCommunity.dart';
 import 'package:discussit/features/community/screens/modtools.dart';
 import 'package:discussit/features/home/screen/homescreen.dart';
+import 'package:discussit/features/user_profile/screens/user_profile_screen.dart';
+import 'package:discussit/features/user_profile/screens/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
 
@@ -32,4 +34,27 @@ final loggedInRoute = RouteMap(routes: {
           child: AddModsScreen(
         name: routeData.pathParameters['name']!,
       )),
+  '/u/:uid': (routeData) => MaterialPage(
+          child: UserProfileScreen(
+        uid: routeData.pathParameters['uid']!,
+      )),
+  '/u/edit-profile/:uid': (routeData) {
+    final uid = routeData.pathParameters['uid'];
+    if (uid != null) {
+      return MaterialPage(
+        child: EditProfileScreen(
+          uid: uid,
+        ),
+      );
+    } else {
+      // Handle the case when the uid is null, for example, show an error message or redirect to another screen.
+      return MaterialPage(
+        child: Scaffold(
+          body: Center(
+            child: Text('Error: User ID is null.'),
+          ),
+        ),
+      );
+    }
+  }
 });

@@ -1,5 +1,5 @@
 import 'package:discussit/core/common/error_text.dart';
-import 'package:discussit/core/constants.dart';
+import 'package:discussit/core/constants/constants.dart';
 import 'package:discussit/core/utils.dart';
 import 'package:discussit/features/auth/screen/loginScreen.dart';
 import 'package:discussit/features/community/controller/communityController.dart';

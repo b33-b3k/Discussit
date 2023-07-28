@@ -504,6 +504,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  sharedpreference_utils:
+    dependency: "direct main"
+    description:
+      name: sharedpreference_utils
+      sha256: edf156669e08ce25eb25647d11fa1a349c32be04ba14180feb635fc9680e0715
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
