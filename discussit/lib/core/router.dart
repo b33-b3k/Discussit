@@ -5,6 +5,8 @@ import 'package:discussit/features/community/screens/create_community_screen.dar
 import 'package:discussit/features/community/screens/editCommunity.dart';
 import 'package:discussit/features/community/screens/modtools.dart';
 import 'package:discussit/features/home/screen/homescreen.dart';
+import 'package:discussit/features/post/screens/addPostScreen.dart';
+import 'package:discussit/features/post/screens/addPostTypeScreen.dart';
 import 'package:discussit/features/user_profile/screens/user_profile_screen.dart';
 import 'package:discussit/features/user_profile/screens/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +50,7 @@ final loggedInRoute = RouteMap(routes: {
       );
     } else {
       // Handle the case when the uid is null, for example, show an error message or redirect to another screen.
-      return MaterialPage(
+      return const MaterialPage(
         child: Scaffold(
           body: Center(
             child: Text('Error: User ID is null.'),
@@ -56,5 +58,9 @@ final loggedInRoute = RouteMap(routes: {
         ),
       );
     }
-  }
+  },
+  '/add-post/:type': (routeData) => MaterialPage(
+          child: AddPostTypeScreen(
+        type: routeData.pathParameters['type']!,
+      )),
 });

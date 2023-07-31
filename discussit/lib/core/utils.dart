@@ -8,10 +8,14 @@ void showSnackBar(BuildContext context, String text) {
 }
 
 Future<FilePickerResult?> pickImage() async {
-  final image = await FilePicker.platform.pickFiles(
-    type: FileType.image,
-    allowMultiple: false,
-  );
+  try {
+    final image = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    );
 
-  return image;
+    return image;
+  } catch (error) {
+    print(error);
+  }
 }

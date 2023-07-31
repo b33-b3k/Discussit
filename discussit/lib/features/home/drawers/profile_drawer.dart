@@ -32,7 +32,7 @@ class ProfileDrawer extends ConsumerWidget {
         SizedBox(
           height: 10,
         ),
-        Text("u/${user?.name}", style: Theme.of(context).textTheme.headline6),
+        Text("u/${user.name}", style: Theme.of(context).textTheme.titleLarge),
         Divider(
           thickness: 2,
         ),
@@ -40,7 +40,7 @@ class ProfileDrawer extends ConsumerWidget {
           leading: Icon(Icons.person),
           title: Text("Profile"),
           onTap: () {
-            navToUserProfile(context, user!.uid);
+            navToUserProfile(context, user.uid);
           },
         ),
         ListTile(
