@@ -81,11 +81,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 icon: Icon(Icons.home_outlined), label: "Home"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.add_outlined), label: "Add"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.notifications_outlined),
-                label: "Notifications"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline), label: "Profile"),
+            // BottomNavigationBarItem(
+            //     icon: Icon(Icons.notifications_outlined),
+            //     label: "Notifications"),
+            // BottomNavigationBarItem(
+            //     icon: Icon(Icons.person_outline), label: "Profile"),
           ],
           onTap: onPageChanged,
           currentIndex: _page,
