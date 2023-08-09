@@ -4,6 +4,7 @@ import 'package:discussit/core/firebase_constants.dart';
 
 import 'package:discussit/core/typedef.dart';
 import 'package:discussit/models/community_model.dart';
+import 'package:discussit/models/post_model.dart';
 
 import 'package:fpdart/fpdart.dart';
 
@@ -119,6 +120,18 @@ class CommunityRepository {
     }
   }
 
+  Stream<List<Post>> getCommunityPost(String name) {
+    return posts
+        .where('communityName', isEqualTo: name)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((event) => event.docs
+            .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
+            .toList());
+  }
+
   CollectionReference get _communities =>
       _firestore.collection(FirebaseConstants.communitiesCollection);
+  CollectionReference get posts =>
+      _firestore.collection(FirebaseConstants.postsCollection);
 }

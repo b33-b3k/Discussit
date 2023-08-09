@@ -56,7 +56,7 @@ class PostCard extends ConsumerWidget {
                                           .push('/u/${post.communityName}');
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.all(5),
+                                      padding: const EdgeInsets.all(5),
                                       child: CircleAvatar(
                                         radius: 16,
                                         backgroundImage: NetworkImage(
@@ -77,7 +77,7 @@ class PostCard extends ConsumerWidget {
                                           },
                                           child: Text(
                                             'd/${post.communityName}',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -89,7 +89,7 @@ class PostCard extends ConsumerWidget {
                                           },
                                           child: Text(
                                             'u/${post.username}',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 9,
                                                 fontWeight: FontWeight.w100),
                                           ),
@@ -104,7 +104,7 @@ class PostCard extends ConsumerWidget {
                                     onPressed: () {
                                       deletePost(ref, context);
                                     },
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.delete,
                                       color: Colors.red,
                                     ))
@@ -117,7 +117,7 @@ class PostCard extends ConsumerWidget {
                                   const EdgeInsets.fromLTRB(15, 10, 15, 10),
                               child: Text(
                                 post.title,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 19, fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -133,7 +133,8 @@ class PostCard extends ConsumerWidget {
                             ),
                           if (isTypeLink)
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: AnyLinkPreview(
                                 displayDirection:
                                     UIDirection.uiDirectionVertical,
@@ -149,7 +150,7 @@ class PostCard extends ConsumerWidget {
                                 ),
                                 child: Text(
                                   post.description!,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 16,
                                       color: Colors.grey,
                                       fontWeight: FontWeight.w300),
@@ -172,7 +173,7 @@ class PostCard extends ConsumerWidget {
                               ),
                               Text(
                                   "${post.upvotes.length - post.downvotes.length == 0 ? "Vote" : post.upvotes.length - post.downvotes.length}",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold)),
                               IconButton(
@@ -187,14 +188,17 @@ class PostCard extends ConsumerWidget {
                                         ? Pallete.blueColor
                                         : null),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 20,
                               ),
                               Row(
                                 children: [
                                   IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
+                                      onPressed: () {
+                                        Routemaster.of(context).push(
+                                            '/d/${post.communityName}/post/${post.id}/comments');
+                                      },
+                                      icon: const Icon(
                                         Icons.insert_comment_outlined,
                                         size: 30,
                                       )),
@@ -203,7 +207,7 @@ class PostCard extends ConsumerWidget {
                                       style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500)),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 15,
                                   ),
                                   ref
@@ -217,12 +221,12 @@ class PostCard extends ConsumerWidget {
                                                 onPressed: () {
                                                   deletePost(ref, context);
                                                 },
-                                                icon: Icon(
+                                                icon: const Icon(
                                                   Icons.add_moderator_outlined,
                                                   size: 30,
                                                 ));
                                           }
-                                          return SizedBox();
+                                          return const SizedBox();
                                         },
                                         error: ((error, stackTrace) {
                                           return Errortext(
@@ -232,11 +236,12 @@ class PostCard extends ConsumerWidget {
                                         loading: () => const Loader(),
                                       ),
                                   IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.add_moderator_outlined,
-                                        size: 30,
-                                      )),
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.add_moderator_outlined,
+                                      size: 30,
+                                    ),
+                                  ),
                                 ],
                               )
                             ],
@@ -250,6 +255,9 @@ class PostCard extends ConsumerWidget {
             ],
           ),
         ),
+        const SizedBox(
+          height: 10,
+        )
       ],
     );
   }

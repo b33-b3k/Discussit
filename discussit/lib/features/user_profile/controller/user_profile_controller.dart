@@ -4,6 +4,7 @@ import 'package:discussit/core/providers/storage_repo_provider.dart';
 import 'package:discussit/core/utils.dart';
 import 'package:discussit/features/auth/controller/auth_controller.dart';
 import 'package:discussit/features/user_profile/repository/user_profile_repo.dart';
+import 'package:discussit/models/post_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,10 +20,15 @@ final UserProfileControllerProvider =
       ref: ref);
 });
 
+final getUserPostsProvider = StreamProvider.family((ref, String uid) {
+  return ref.watch(UserProfileControllerProvider.notifier).getUserPosts(uid);
+});
+
 class UserProfileController extends StateNotifier<bool> {
   //state notifier to notify for change
   final UserProfileRepository
       _userProfileRepository; //this is used to create a new provider in ccscreen
+
   final Ref _ref;
   final StorageRepository _storageRepository;
 
@@ -34,6 +40,10 @@ class UserProfileController extends StateNotifier<bool> {
         _ref = ref,
         _storageRepository = storageRepository,
         super(false);
+
+  Stream<List<Post>> getUserPosts(String uid) {
+    return _userProfileRepository.getUserPosts(uid);
+  }
 
   void editProfile(
       {required File? profilePic,

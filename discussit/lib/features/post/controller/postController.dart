@@ -4,7 +4,6 @@ import 'package:discussit/core/providers/firebase_providers.dart';
 import 'package:discussit/core/providers/storage_repo_provider.dart';
 import 'package:discussit/core/utils.dart';
 import 'package:discussit/features/auth/controller/auth_controller.dart';
-import 'package:discussit/features/community/repository/community_repo.dart';
 import 'package:discussit/features/post/repository/postRepo.dart';
 import 'package:discussit/models/community_model.dart';
 import 'package:discussit/models/post_model.dart';
@@ -28,6 +27,11 @@ final userPostProvider =
     StreamProvider.family((ref, List<Community> communities) {
   final postController = ref.watch(postControllerProvider.notifier);
   return postController.fetchUserPosts(communities);
+});
+
+final getPostByIdProvider = StreamProvider.family((ref, String postId) {
+  final postController = ref.watch(postControllerProvider.notifier);
+  return postController.getPostById(postId);
 });
 
 class PostController extends StateNotifier<bool> {
@@ -173,5 +177,9 @@ class PostController extends StateNotifier<bool> {
   void downvote(Post post) async {
     final uid = _ref.read(userProvider)?.uid ?? "";
     _postRepository.downvote(post, uid);
+  }
+
+  Stream<Post> getPostById(String postId) {
+    return _postRepository.getPostById(postId);
   }
 }

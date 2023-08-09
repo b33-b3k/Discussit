@@ -3,6 +3,7 @@ import 'package:discussit/features/auth/controller/auth_controller.dart';
 import 'package:discussit/features/auth/screen/loginScreen.dart';
 import 'package:discussit/features/community/controller/communityController.dart';
 import 'package:discussit/features/community/screens/create_community_screen.dart';
+import 'package:discussit/features/post/screens/post_card.dart';
 import 'package:discussit/models/community_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -110,7 +111,19 @@ class CommunityScreen extends ConsumerWidget {
                     )
                   ];
                 }),
-                body: const Text("data")),
+                body: ref.watch(getCommunityPostsProvider(name)).when(
+                    data: (data) {
+                      return ListView.builder(
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            final post = data[index];
+                            return PostCard(post: post);
+                          });
+                    },
+                    error: ((error, stackTrace) {
+                      return Errortext(error: error.toString());
+                    }),
+                    loading: () => const Loader())),
             error: ((error, stackTrace) => Errortext(error: error.toString())),
             loading: () => const Loader()));
   }

@@ -19,6 +19,8 @@ class PostRepository {
 
   CollectionReference get _posts =>
       _firestore.collection(FirebaseConstants.postsCollection);
+  CollectionReference get _comments =>
+      _firestore.collection(FirebaseConstants.commentsCollection);
 
   FutureVoid addPost(Post post) async {
     try {
@@ -82,6 +84,21 @@ class PostRepository {
       _posts.doc(post.id).update({
         'downvotes': FieldValue.arrayUnion([userId]),
       });
+    }
+  }
+
+  Stream<Post> getPostById(String postId) {
+    return _posts
+        .doc(postId)
+        .snapshots()
+        .map((event) => Post.fromMap(event.data() as Map<String, dynamic>));
+  }
+
+  FutureVoid addComment(Post post) async {
+    try {
+      return right(_posts.doc(post.id).delete());
+    } on FirebaseException catch (e) {
+      return left(Failure(e.toString()));
     }
   }
 }

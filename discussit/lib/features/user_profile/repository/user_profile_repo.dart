@@ -3,6 +3,7 @@ import 'package:discussit/core/failure.dart';
 import 'package:discussit/core/firebase_constants.dart';
 import 'package:discussit/core/providers/firebase_providers.dart';
 import 'package:discussit/core/typedef.dart';
+import 'package:discussit/models/post_model.dart';
 import 'package:discussit/models/user_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
@@ -23,6 +24,19 @@ class UserProfileRepository {
     } on FirebaseException catch (e) {
       return left(Failure(e.toString()));
     }
+  }
+
+  CollectionReference get _posts =>
+      _firestore.collection(FirebaseConstants.postsCollection);
+
+  Stream<List<Post>> getUserPosts(String uid) {
+    return _posts
+        .where('uid', isEqualTo: uid)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((event) => event.docs
+            .map((e) => Post.fromMap(e.data() as Map<String, dynamic>))
+            .toList());
   }
 
   CollectionReference get _users =>

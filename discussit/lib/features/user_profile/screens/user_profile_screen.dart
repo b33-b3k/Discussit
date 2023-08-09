@@ -1,6 +1,8 @@
 import 'package:discussit/core/common/error_text.dart';
 import 'package:discussit/features/auth/controller/auth_controller.dart';
 import 'package:discussit/features/auth/screen/loginScreen.dart';
+import 'package:discussit/features/post/screens/post_card.dart';
+import 'package:discussit/features/user_profile/controller/user_profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
@@ -93,7 +95,19 @@ class UserProfileScreen extends ConsumerWidget {
                       )
                     ];
                   }),
-                  body: const Text("data")),
+                  body: ref.watch(getUserPostsProvider(uid)).when(
+                      data: (data) {
+                        return ListView.builder(
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              final post = data[index];
+                              return PostCard(post: post);
+                            });
+                      },
+                      error: ((error, stackTrace) {
+                        return Errortext(error: error.toString());
+                      }),
+                      loading: () => const Loader())),
               error: ((error, stackTrace) =>
                   Errortext(error: error.toString())),
               loading: () => const Loader())),

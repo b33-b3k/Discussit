@@ -9,6 +9,7 @@ import 'package:discussit/features/auth/controller/auth_controller.dart';
 import 'package:discussit/features/community/repository/community_repo.dart';
 import 'package:discussit/features/community/screens/create_community_screen.dart';
 import 'package:discussit/models/community_model.dart';
+import 'package:discussit/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
@@ -30,6 +31,12 @@ final getCommunitybyNameProvider = StreamProvider.family((ref, String name) {
 
 final searchCommunityProvider = StreamProvider.family((ref, String query) {
   return ref.watch(communityControllerProvider.notifier).searchCommunity(query);
+});
+
+final getCommunityPostsProvider = StreamProvider.family((ref, String name) {
+  return ref
+      .watch(communityControllerProvider.notifier)
+      .getCommunityPosts(name);
 });
 
 final class CommunityController extends StateNotifier<bool> {
@@ -140,5 +147,9 @@ final class CommunityController extends StateNotifier<bool> {
 
     res.fold((l) => showSnackBar(context, l.message),
         (r) => Routemaster.of(context).pop());
+  }
+
+  Stream<List<Post>> getCommunityPosts(String name) {
+    return _communityRepository.getCommunityPost(name);
   }
 }
