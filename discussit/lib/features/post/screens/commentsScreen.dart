@@ -1,54 +1,96 @@
 import 'package:discussit/core/common/error_text.dart';
+import 'package:discussit/features/auth/controller/auth_controller.dart';
 import 'package:discussit/features/auth/screen/loginScreen.dart';
 import 'package:discussit/features/post/controller/postController.dart';
 import 'package:discussit/features/post/screens/post_card.dart';
+import 'package:discussit/features/post/widgets/comment_card.dart';
+import 'package:discussit/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:responsive/responsive.dart';
 
-class CommentScreen extends ConsumerStatefulWidget {
+class CommentsScreen extends ConsumerStatefulWidget {
   final String postId;
-
-  CommentScreen({super.key, required this.postId});
+  const CommentsScreen({
+    super.key,
+    required this.postId,
+  });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _CommentScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _CommentsScreenState();
 }
 
-class _CommentScreenState extends ConsumerState<CommentScreen> {
+class _CommentsScreenState extends ConsumerState<CommentsScreen> {
   final commentController = TextEditingController();
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     commentController.dispose();
   }
 
+  void addComment(Post post) {
+    ref.read(postControllerProvider.notifier).addComment(
+          context: context,
+          text: commentController.text.trim(),
+          post: post,
+        );
+    setState(() {
+      commentController.text = '';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider)!;
+    final isGuest = !user.isAuthenticated;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Comments"),
-      ),
+      appBar: AppBar(),
       body: ref.watch(getPostByIdProvider(widget.postId)).when(
-          data: (data) {
-            return Column(
-              children: [
-                PostCard(post: data),
-                TextField(
-                  controller: commentController,
-                  decoration: const InputDecoration(
-                    hintText: "Add a comment",
-                    filled: true,
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.comment),
-                  ),
-                ),
-              ],
-            );
-          },
-          error: ((error, stackTrace) => Errortext(error: error.toString())),
-          loading: () => const Loader()),
+            data: (data) {
+              return Column(
+                children: [
+                  PostCard(post: data),
+                  if (!isGuest)
+                    Expanded(
+                      child: TextField(
+                        onSubmitted: (val) => addComment(data),
+                        controller: commentController,
+                        decoration: const InputDecoration(
+                          hintText: 'What are your thoughts?',
+                          filled: true,
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ref.watch(getPostCommentsProvider(widget.postId)).when(
+                        data: (data) {
+                          return Expanded(
+                            child: ListView.builder(
+                              itemCount: data.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final comment = data[index];
+                                return CommentCard(comment: comment);
+                              },
+                            ),
+                          );
+                        },
+                        error: (error, stackTrace) {
+                          return Errortext(
+                            error: error.toString(),
+                          );
+                        },
+                        loading: () => const Loader(),
+                      ),
+                ],
+              );
+            },
+            error: (error, stackTrace) => Errortext(
+              error: error.toString(),
+            ),
+            loading: () => const Loader(),
+          ),
     );
   }
 }

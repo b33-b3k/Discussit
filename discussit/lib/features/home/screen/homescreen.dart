@@ -35,6 +35,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
     final currentTheme = ref.watch(themeNotifierProvider);
+    final isGuest = !user!.isAuthenticated;
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -72,24 +73,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             .tabWidgets[_page], //fetch widget and display each using page
         //0 feed 1 addPost
         drawer: CommunityList(),
-        endDrawer: const ProfileDrawer(),
-        bottomNavigationBar: CupertinoTabBar(
-          activeColor: currentTheme.iconTheme.color,
-          backgroundColor: currentTheme.backgroundColor,
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined), label: "Home"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.add_outlined), label: "Add"),
-            // BottomNavigationBarItem(
-            //     icon: Icon(Icons.notifications_outlined),
-            //     label: "Notifications"),
-            // BottomNavigationBarItem(
-            //     icon: Icon(Icons.person_outline), label: "Profile"),
-          ],
-          onTap: onPageChanged,
-          currentIndex: _page,
-        ),
+        endDrawer: isGuest ? null : const ProfileDrawer(),
+        bottomNavigationBar: isGuest
+            ? null
+            : CupertinoTabBar(
+                activeColor: currentTheme.iconTheme.color,
+                backgroundColor: currentTheme.backgroundColor,
+                items: const [
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.home_outlined), label: "Home"),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.add_outlined), label: "Add"),
+                  // BottomNavigationBarItem(
+                  //     icon: Icon(Icons.notifications_outlined),
+                  //     label: "Notifications"),
+                  // BottomNavigationBarItem(
+                  //     icon: Icon(Icons.person_outline), label: "Profile"),
+                ],
+                onTap: onPageChanged,
+                currentIndex: _page,
+              ),
       ),
     );
   }

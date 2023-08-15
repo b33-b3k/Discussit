@@ -35,7 +35,7 @@ class AuthRepository {
 
   Stream<User?> get authStateChange => _auth.authStateChanges();
 
-  FutureEither<UserModel> signInWithGoogle() async {
+  FutureEither<UserModel> signInWithGoogle(bool isFromLogin) async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleAuth =
@@ -44,8 +44,13 @@ class AuthRepository {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
+      UserCredential userCredential;
+      if (isFromLogin) {
+        userCredential = await _auth.signInWithCredential(credential);
+      } else {
+        userCredential = (await _auth.currentUser?.linkWithCredential(
+            credential))!; //link credentials of guest with new
+      }
       late UserModel userModel;
       if (userCredential.user != null) {
         if (userCredential.additionalUserInfo!.isNewUser) {
@@ -65,6 +70,32 @@ class AuthRepository {
           userModel = await getUserData(userCredential.user!.uid).first;
           print(userModel);
         }
+      }
+      return right(userModel);
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (E) {
+      return left(Failure(E.toString()));
+    }
+  }
+
+  FutureEither<UserModel> signInAsGuest() async {
+    try {
+      var userCredential = await _auth.signInAnonymously();
+      late UserModel userModel;
+
+      if (userCredential.additionalUserInfo!.isNewUser) {
+        userModel = UserModel(
+          name: 'Guest',
+          email: userCredential.user!.email ?? " ",
+          profilepic: Constants.avatarDefault,
+          banner: Constants.bannerDefault,
+          uid: userCredential.user!.uid,
+          bio: "bio",
+          isAuthenticated: false,
+          karma: 0,
+        );
+        await _users.doc(userCredential.user!.uid).set(userModel.toMap());
       }
       return right(userModel);
     } on FirebaseException catch (e) {

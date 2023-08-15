@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:discussit/core/enums/enums.dart';
 import 'package:discussit/core/providers/storage_repo_provider.dart';
 import 'package:discussit/core/utils.dart';
 import 'package:discussit/features/auth/controller/auth_controller.dart';
 import 'package:discussit/features/user_profile/repository/user_profile_repo.dart';
 import 'package:discussit/models/post_model.dart';
+import 'package:discussit/models/user_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,6 +47,16 @@ class UserProfileController extends StateNotifier<bool> {
     return _userProfileRepository.getUserPosts(uid);
   }
 
+  void updateUserKarma(UserKarma karma) async {
+    var user = _ref.read(userProvider); //i changed this
+    user = user?.copyWith(karma: user.karma + karma.karma);
+
+    final res = await _userProfileRepository.updateUserKarma(user!);
+    res
+        .fold((l) => null, (r) => _ref.read(userProvider.notifier))
+        ?.update((state) => user);
+  }
+
   void editProfile(
       {required File? profilePic,
       required File? bannerFile,
@@ -71,6 +83,9 @@ class UserProfileController extends StateNotifier<bool> {
           (r) => user = user?.copyWith(banner: r));
     }
     state = false;
+    user = user?.copyWith(name: name);
+    // Update user in the state
+    _ref.read(userProvider.notifier).update((state) => user);
 
     final res = await _userProfileRepository.updateProfile(user!);
     res.fold((l) => showSnackBar(context, l.message), (r) {

@@ -15,7 +15,7 @@ import 'package:routemaster/routemaster.dart';
 class PostCard extends ConsumerWidget {
   final Post post;
 
-  const PostCard({super.key, required this.post});
+  PostCard({super.key, required this.post});
 
   void deletePost(WidgetRef ref, BuildContext context) async {
     ref.read(postControllerProvider.notifier).deletePost(post, context);
@@ -28,6 +28,7 @@ class PostCard extends ConsumerWidget {
     final isTypeLink = post.type == 'link';
     final user = ref.watch(userProvider);
     final currentTheme = ref.watch(themeNotifierProvider);
+    final isGuest = !user!.isAuthenticated;
     return Column(
       children: [
         Container(
@@ -161,9 +162,11 @@ class PostCard extends ConsumerWidget {
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  ref
-                                      .watch(postRepositoryProvider)
-                                      .upvote(post, user!.uid);
+                                  isGuest
+                                      ? null
+                                      : ref
+                                          .watch(postRepositoryProvider)
+                                          .upvote(post, user!.uid);
                                 },
                                 icon: Icon(Constants.up,
                                     size: 30,
@@ -178,9 +181,11 @@ class PostCard extends ConsumerWidget {
                                       fontWeight: FontWeight.bold)),
                               IconButton(
                                 onPressed: () {
-                                  ref
-                                      .watch(postRepositoryProvider)
-                                      .downvote(post, user!.uid);
+                                  isGuest
+                                      ? null
+                                      : ref
+                                          .watch(postRepositoryProvider)
+                                          .downvote(post, user!.uid);
                                 },
                                 icon: Icon(Constants.down,
                                     size: 30,
@@ -195,8 +200,8 @@ class PostCard extends ConsumerWidget {
                                 children: [
                                   IconButton(
                                       onPressed: () {
-                                        Routemaster.of(context).push(
-                                            '/d/${post.communityName}/post/${post.id}/comments');
+                                        Routemaster.of(context)
+                                            .push('/post/${post.id}/comments');
                                       },
                                       icon: const Icon(
                                         Icons.insert_comment_outlined,

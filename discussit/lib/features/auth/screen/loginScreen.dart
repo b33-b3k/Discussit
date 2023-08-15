@@ -20,7 +20,9 @@ class Login extends ConsumerWidget {
         actions: [
           TextButton(
             child: Text("Skip", style: TextStyle(fontWeight: FontWeight.bold)),
-            onPressed: () {},
+            onPressed: () {
+              ref.read(authControllerProvider.notifier).signInAsGuest(context);
+            },
           ),
         ],
       ),

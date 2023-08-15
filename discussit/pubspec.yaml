@@ -50,6 +50,7 @@ dependencies:
   sharedpreference_utils: ^1.0.0
   uuid: ^3.0.7
   any_link_preview: ^3.0.1
+  responsive: ^0.3.11+11
 
 dev_dependencies:
   flutter_test:

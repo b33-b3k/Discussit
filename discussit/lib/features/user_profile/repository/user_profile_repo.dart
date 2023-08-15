@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:discussit/core/enums/enums.dart';
 import 'package:discussit/core/failure.dart';
 import 'package:discussit/core/firebase_constants.dart';
 import 'package:discussit/core/providers/firebase_providers.dart';
@@ -41,4 +42,12 @@ class UserProfileRepository {
 
   CollectionReference get _users =>
       _firestore.collection(FirebaseConstants.usersCollection);
+
+  FutureVoid updateUserKarma(UserModel user) async {
+    try {
+      return right(_users.doc(user.uid).update({'karma': user.karma}));
+    } on FirebaseException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }
